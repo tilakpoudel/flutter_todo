@@ -12,7 +12,14 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> {
   final todoList = ToDo.todoList();
+  List<ToDo> _filteredToDo = [];
   final _todoController = TextEditingController();
+
+  @override
+  void initState() {
+    _filteredToDo = todoList;
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -39,7 +46,7 @@ class _HomeState extends State<Home> {
                           ),
                         ),
                       ),
-                      for (ToDo toDo in todoList)
+                      for (ToDo toDo in _filteredToDo.reversed)
                         ToDoItem(
                           todo: toDo,
                           onToDoChanged: _handleToDoChange,
@@ -127,16 +134,36 @@ class _HomeState extends State<Home> {
   }
 
   void _addToDoItem(String toDo) {
-    setState(() {
-      todoList.add(
-        ToDo(
-          id: DateTime.now().millisecond.toString(),
-          todoText: toDo,
-        ),
-      );
-    });
+    if (toDo.isNotEmpty) {
+      setState(() {
+        todoList.add(
+          ToDo(
+            id: DateTime.now().millisecond.toString(),
+            todoText: toDo,
+          ),
+        );
+      });
 
-    _todoController.clear();
+      _todoController.clear();
+    }
+  }
+
+  void _runFilter(String enteredKeyword) {
+    List<ToDo> results = [];
+
+    if (enteredKeyword.isEmpty) {
+      results = todoList;
+    } else {
+      results = todoList
+          .where((item) => item.todoText!
+              .toLowerCase()
+              .contains(enteredKeyword.toLowerCase()))
+          .toList();
+    }
+
+    setState(() {
+      _filteredToDo = results;
+    });
   }
 
   Widget searchBox() {
@@ -146,8 +173,9 @@ class _HomeState extends State<Home> {
         color: Colors.white,
         borderRadius: BorderRadius.circular(20),
       ),
-      child: const TextField(
-        decoration: InputDecoration(
+      child: TextField(
+        onChanged: (value) => _runFilter(value),
+        decoration: const InputDecoration(
           contentPadding: EdgeInsets.all(0),
           prefixIcon: Icon(
             Icons.search,
