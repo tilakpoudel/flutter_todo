@@ -50,7 +50,7 @@ class _HomeState extends State<Home> {
                         ToDoItem(
                           todo: toDo,
                           onToDoChanged: _handleToDoChange,
-                          onDeleteItem: _deleteToDoItem,
+                          onDeleteItem: _confirmDelete,
                         ),
                     ],
                   ),
@@ -104,7 +104,9 @@ class _HomeState extends State<Home> {
                       _addToDoItem(_todoController.text);
                     }),
                     style: ElevatedButton.styleFrom(
-                        backgroundColor: tdBlue, elevation: 10),
+                      backgroundColor: tdBlue,
+                      elevation: 10,
+                    ),
                     child: const Text(
                       '+',
                       style: TextStyle(
@@ -125,6 +127,34 @@ class _HomeState extends State<Home> {
     setState(() {
       todo.isDone = !todo.isDone;
     });
+  }
+
+  void _confirmDelete(String id) {
+    showDialog(
+        context: context,
+        builder: ((BuildContext context) {
+          return AlertDialog(
+            title: const Text('Confirm delete'),
+            content: const Text('Are you sure you want to delete this item?'),
+            actions: [
+              ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.red,
+                  elevation: 10,
+                ),
+                child: const Text("Cancel"),
+                onPressed: () => Navigator.pop(context),
+              ),
+              ElevatedButton(
+                child: const Text("Confirm"),
+                onPressed: () {
+                  _deleteToDoItem(id);
+                  Navigator.pop(context);
+                },
+              ),
+            ],
+          );
+        }));
   }
 
   void _deleteToDoItem(String id) {
