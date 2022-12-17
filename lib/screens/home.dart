@@ -3,10 +3,16 @@ import '../models/todos.dart';
 import '../widgets/todo_item.dart';
 import '../constants/colors.dart';
 
-class Home extends StatelessWidget {
+class Home extends StatefulWidget {
   Home({super.key});
 
+  @override
+  State<Home> createState() => _HomeState();
+}
+
+class _HomeState extends State<Home> {
   final todoList = ToDo.todoList();
+  final _todoController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -36,6 +42,8 @@ class Home extends StatelessWidget {
                       for (ToDo toDo in todoList)
                         ToDoItem(
                           todo: toDo,
+                          onToDoChanged: _handleToDoChange,
+                          onDeleteItem: _deleteToDoItem,
                         ),
                     ],
                   ),
@@ -70,8 +78,9 @@ class Home extends StatelessWidget {
                       ],
                       borderRadius: BorderRadius.circular(10),
                     ),
-                    child: const TextField(
-                      decoration: InputDecoration(
+                    child: TextField(
+                      controller: _todoController,
+                      decoration: const InputDecoration(
                         hintText: 'Add new todo item',
                         border: InputBorder.none,
                       ),
@@ -84,10 +93,11 @@ class Home extends StatelessWidget {
                     right: 20,
                   ),
                   child: ElevatedButton(
-                    onPressed: (() {}),
+                    onPressed: (() {
+                      _addToDoItem(_todoController.text);
+                    }),
                     style: ElevatedButton.styleFrom(
-                        backgroundColor: tdBlue,
-                        elevation: 10),
+                        backgroundColor: tdBlue, elevation: 10),
                     child: const Text(
                       '+',
                       style: TextStyle(
@@ -102,6 +112,31 @@ class Home extends StatelessWidget {
         ],
       ),
     );
+  }
+
+  void _handleToDoChange(ToDo todo) {
+    setState(() {
+      todo.isDone = !todo.isDone;
+    });
+  }
+
+  void _deleteToDoItem(String id) {
+    setState(() {
+      todoList.removeWhere((item) => item.id == id);
+    });
+  }
+
+  void _addToDoItem(String toDo) {
+    setState(() {
+      todoList.add(
+        ToDo(
+          id: DateTime.now().millisecond.toString(),
+          todoText: toDo,
+        ),
+      );
+    });
+
+    _todoController.clear();
   }
 
   Widget searchBox() {
