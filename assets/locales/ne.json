@@ -1,10 +1,12 @@
 {
-    "app_name" : "ToDo एप",
-    "all_todo" : "सबै ToDOs",
     "add_new_item" : "नयाँ कार्य वस्तु थप्नुहोस्",
-    "search" : "खोज्नुहोस्",
+    "all_todo" : "सबै ToDOs",
+    "app_name" : "ToDo एप",
+    "cancel" : "रद्द गर्नुहोस्",
     "confirm_delete" : "मेटाउने पुष्टि गर्नुहोस्",
     "confirm_description" : "के तपाइँ यो वस्तु मेटाउन निश्चित हुनुहुन्छ?",
-    "cancel" : "रद्द गर्नुहोस्",
-    "confirm": "पुष्टि गर्नुहोस्"
+    "confirm": "पुष्टि गर्नुहोस्",
+    "task_added_successfully": "कार्य सफलतापूर्वक थपियो",
+    "task_deleted_successfully": "कार्य सफलतापूर्वक मेटाइयो",
+    "search" : "खोज्नुहोस्"
 }

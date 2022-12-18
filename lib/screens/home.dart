@@ -150,7 +150,6 @@ class _HomeState extends State<Home> {
                 child: const LocaleText('Confirm'),
                 onPressed: () {
                   _deleteToDoItem(id);
-                  Navigator.pop(context);
                 },
               ),
             ],
@@ -162,6 +161,19 @@ class _HomeState extends State<Home> {
     setState(() {
       todoList.removeWhere((item) => item.id == id);
     });
+
+    // remove confirm modal
+    Navigator.pop(context);
+
+    // snow notification
+    const snackBar = SnackBar(
+      content: LocaleText('task_deleted_successfully'),
+      backgroundColor: Colors.green,
+    );
+
+    // Find the ScaffoldMessenger in the widget tree
+    // and use it to show a SnackBar.
+    ScaffoldMessenger.of(context).showSnackBar(snackBar);
   }
 
   void _addToDoItem(String toDo) {
@@ -176,6 +188,17 @@ class _HomeState extends State<Home> {
       });
 
       _todoController.clear();
+      FocusScope.of(context).requestFocus(FocusNode());
+
+      // snow notification
+      const snackBar = SnackBar(
+        content: LocaleText('task_added_successfully'),
+        backgroundColor: Colors.green,
+      );
+
+      // Find the ScaffoldMessenger in the widget tree
+      // and use it to show a SnackBar.
+      ScaffoldMessenger.of(context).showSnackBar(snackBar);
     }
   }
 
@@ -207,7 +230,7 @@ class _HomeState extends State<Home> {
       child: TextField(
         onChanged: (value) => _runFilter(value),
         decoration: InputDecoration(
-          contentPadding: EdgeInsets.all(0),
+          contentPadding: const EdgeInsets.all(0),
           prefixIcon: const Icon(
             Icons.search,
             color: tdBlack,
