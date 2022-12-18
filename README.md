@@ -1,6 +1,6 @@
 # Todo App
 
-A new ToDo app made in Flutter, with following features:
+## A new ToDo app made in Flutter, with following features:
 - Locale support for English and Nepali.
 - Live search.
 - Confirmation modal before deleting any task.
