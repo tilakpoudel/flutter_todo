@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_locales/flutter_locales.dart';
 import '../models/todos.dart';
 import '../widgets/todo_item.dart';
 import '../constants/colors.dart';
@@ -38,8 +39,8 @@ class _HomeState extends State<Home> {
                     children: [
                       Container(
                         margin: const EdgeInsets.only(top: 40, bottom: 20),
-                        child: const Text(
-                          'All ToDos',
+                        child: const LocaleText(
+                          'all_todo',
                           style: TextStyle(
                             fontSize: 30,
                             fontWeight: FontWeight.w500,
@@ -87,8 +88,8 @@ class _HomeState extends State<Home> {
                     ),
                     child: TextField(
                       controller: _todoController,
-                      decoration: const InputDecoration(
-                        hintText: 'Add new todo item',
+                      decoration: InputDecoration(
+                        hintText: Locales.string(context, 'add_new_item'),
                         border: InputBorder.none,
                       ),
                     ),
@@ -134,19 +135,19 @@ class _HomeState extends State<Home> {
         context: context,
         builder: ((BuildContext context) {
           return AlertDialog(
-            title: const Text('Confirm delete'),
-            content: const Text('Are you sure you want to delete this item?'),
+            title: const LocaleText('confirm_delete'),
+            content: const LocaleText('confirm_description'),
             actions: [
               ElevatedButton(
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.red,
                   elevation: 10,
                 ),
-                child: const Text("Cancel"),
+                child: const LocaleText('cancel'),
                 onPressed: () => Navigator.pop(context),
               ),
               ElevatedButton(
-                child: const Text("Confirm"),
+                child: const LocaleText('Confirm'),
                 onPressed: () {
                   _deleteToDoItem(id);
                   Navigator.pop(context);
@@ -205,19 +206,19 @@ class _HomeState extends State<Home> {
       ),
       child: TextField(
         onChanged: (value) => _runFilter(value),
-        decoration: const InputDecoration(
+        decoration: InputDecoration(
           contentPadding: EdgeInsets.all(0),
-          prefixIcon: Icon(
+          prefixIcon: const Icon(
             Icons.search,
             color: tdBlack,
             size: 20,
           ),
-          prefixIconConstraints: BoxConstraints(
+          prefixIconConstraints: const BoxConstraints(
             maxHeight: 20,
             maxWidth: 25,
           ),
           border: InputBorder.none,
-          hintText: 'Search',
+          hintText: Locales.string(context, 'search'),
         ),
       ),
     );

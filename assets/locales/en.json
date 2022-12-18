@@ -1,0 +1,10 @@
+{
+    "app_name" : "ToDo App",
+    "all_todo" : "All ToDOs",
+    "add_new_item" : "Add new todo item",
+    "search" : "Search",
+    "confirm_delete" : "Confirm delete",
+    "confirm_description" : "Are you sure you want to delete this item",
+    "cancel" : "Cancel",
+    "confirm": "Confirm"
+}
