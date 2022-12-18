@@ -271,6 +271,44 @@ class _HomeState extends State<Home> {
           )
         ],
       ),
+      actions: [
+        PopupMenuButton<String>(
+          child: Container(
+            margin: const EdgeInsets.only(right: 30.0),
+            child: Row(
+              children: [
+                const Icon(
+                  Icons.language,
+                  color: Colors.grey,
+                ),
+                Text(
+                  Locales.currentLocale(context)!.toString(),
+                  style: const TextStyle(
+                    color: Colors.black,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ],
+            ),
+          ),
+          // icon: const Icon(Icons.language,),
+          onSelected: (String value) {
+            setState(() {
+              Locales.change(context, value);
+            });
+          },
+          itemBuilder: (BuildContext context) => <PopupMenuEntry<String>>[
+            const PopupMenuItem<String>(
+              value: 'en',
+              child: Text('English'),
+            ),
+            const PopupMenuItem<String>(
+              value: 'ne',
+              child: Text('नेपाली'),
+            ),
+          ],
+        ),
+      ],
     );
   }
 }
