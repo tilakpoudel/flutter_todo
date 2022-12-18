@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_locales/flutter_locales.dart';
 import '../models/todos.dart';
 import '../widgets/todo_item.dart';
 import '../constants/colors.dart';
@@ -38,8 +39,8 @@ class _HomeState extends State<Home> {
                     children: [
                       Container(
                         margin: const EdgeInsets.only(top: 40, bottom: 20),
-                        child: const Text(
-                          'All ToDos',
+                        child: const LocaleText(
+                          'all_todo',
                           style: TextStyle(
                             fontSize: 30,
                             fontWeight: FontWeight.w500,
@@ -87,8 +88,8 @@ class _HomeState extends State<Home> {
                     ),
                     child: TextField(
                       controller: _todoController,
-                      decoration: const InputDecoration(
-                        hintText: 'Add new todo item',
+                      decoration: InputDecoration(
+                        hintText: Locales.string(context, 'add_new_item'),
                         border: InputBorder.none,
                       ),
                     ),
@@ -134,22 +135,21 @@ class _HomeState extends State<Home> {
         context: context,
         builder: ((BuildContext context) {
           return AlertDialog(
-            title: const Text('Confirm delete'),
-            content: const Text('Are you sure you want to delete this item?'),
+            title: const LocaleText('confirm_delete'),
+            content: const LocaleText('confirm_description'),
             actions: [
               ElevatedButton(
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.red,
                   elevation: 10,
                 ),
-                child: const Text("Cancel"),
+                child: const LocaleText('cancel'),
                 onPressed: () => Navigator.pop(context),
               ),
               ElevatedButton(
-                child: const Text("Confirm"),
+                child: const LocaleText('Confirm'),
                 onPressed: () {
                   _deleteToDoItem(id);
-                  Navigator.pop(context);
                 },
               ),
             ],
@@ -161,6 +161,19 @@ class _HomeState extends State<Home> {
     setState(() {
       todoList.removeWhere((item) => item.id == id);
     });
+
+    // remove confirm modal
+    Navigator.pop(context);
+
+    // snow notification
+    const snackBar = SnackBar(
+      content: LocaleText('task_deleted_successfully'),
+      backgroundColor: Colors.green,
+    );
+
+    // Find the ScaffoldMessenger in the widget tree
+    // and use it to show a SnackBar.
+    ScaffoldMessenger.of(context).showSnackBar(snackBar);
   }
 
   void _addToDoItem(String toDo) {
@@ -175,6 +188,17 @@ class _HomeState extends State<Home> {
       });
 
       _todoController.clear();
+      FocusScope.of(context).requestFocus(FocusNode());
+
+      // snow notification
+      const snackBar = SnackBar(
+        content: LocaleText('task_added_successfully'),
+        backgroundColor: Colors.green,
+      );
+
+      // Find the ScaffoldMessenger in the widget tree
+      // and use it to show a SnackBar.
+      ScaffoldMessenger.of(context).showSnackBar(snackBar);
     }
   }
 
@@ -205,19 +229,19 @@ class _HomeState extends State<Home> {
       ),
       child: TextField(
         onChanged: (value) => _runFilter(value),
-        decoration: const InputDecoration(
-          contentPadding: EdgeInsets.all(0),
-          prefixIcon: Icon(
+        decoration: InputDecoration(
+          contentPadding: const EdgeInsets.all(0),
+          prefixIcon: const Icon(
             Icons.search,
             color: tdBlack,
             size: 20,
           ),
-          prefixIconConstraints: BoxConstraints(
+          prefixIconConstraints: const BoxConstraints(
             maxHeight: 20,
             maxWidth: 25,
           ),
           border: InputBorder.none,
-          hintText: 'Search',
+          hintText: Locales.string(context, 'search'),
         ),
       ),
     );
@@ -247,6 +271,44 @@ class _HomeState extends State<Home> {
           )
         ],
       ),
+      actions: [
+        PopupMenuButton<String>(
+          child: Container(
+            margin: const EdgeInsets.only(right: 30.0),
+            child: Row(
+              children: [
+                const Icon(
+                  Icons.language,
+                  color: Colors.grey,
+                ),
+                Text(
+                  Locales.currentLocale(context)!.toString(),
+                  style: const TextStyle(
+                    color: Colors.black,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ],
+            ),
+          ),
+          // icon: const Icon(Icons.language,),
+          onSelected: (String value) {
+            setState(() {
+              Locales.change(context, value);
+            });
+          },
+          itemBuilder: (BuildContext context) => <PopupMenuEntry<String>>[
+            const PopupMenuItem<String>(
+              value: 'en',
+              child: Text('English'),
+            ),
+            const PopupMenuItem<String>(
+              value: 'ne',
+              child: Text('नेपाली'),
+            ),
+          ],
+        ),
+      ],
     );
   }
 }
